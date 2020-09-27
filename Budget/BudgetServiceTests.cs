@@ -23,8 +23,10 @@ namespace Budget
         [Test]
         public void WhenEndDateGreaterThanStartDate()
         {
-            _startDate = new DateTime(2020 , 1 , 1);
-            _endDate   = new DateTime(2019 , 1 , 1);
+            GivenListOfBudgets(new List<Budget>());
+            _repo.GetAll().Returns(_budgets);
+            _startDate = new DateTime(2020, 1, 1);
+            _endDate = new DateTime(2019, 1, 1);
             AmountShouldBe(0);
         }
 
