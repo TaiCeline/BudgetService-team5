@@ -30,7 +30,8 @@ namespace Budget
             foreach (var budget in budgets)
             {
                 var daysInMonth = budget.Days();
-                if (start.ToString("yyyyMM") == end.ToString("yyyyMM"))
+                var isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
+                if (isSameDay)
                 {
                     if (budget.YearMonth == start.ToString("yyyyMM"))
                     {
