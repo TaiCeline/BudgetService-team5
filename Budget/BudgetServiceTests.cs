@@ -64,6 +64,22 @@ namespace Budget
         }
 
         [Test]
+        public void peter_test()
+        {
+            GivenListOfBudgets(new List<Budget>()
+                               {
+                                   new Budget { YearMonth = "202001", Amount = 310 },
+                                   new Budget { YearMonth = "202002", Amount = 29 },
+                                   new Budget { YearMonth = "202003", Amount = 3100 },
+                               });
+            _repo.GetAll().Returns(_budgets);
+            _startDate = new DateTime(2020, 2, 15);
+            _endDate = new DateTime(2020, 2, 15);
+
+            AmountShouldBe(1);
+        }
+
+        [Test]
         public void WhenQueryOneEntireMonth()
         {
             GivenListOfBudgets(new List<Budget>()
