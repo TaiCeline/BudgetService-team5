@@ -16,7 +16,7 @@ namespace Budget
         public int OverlappingDays(Duration budgetDuration)
         {
             // 若起迄相反
-            if (Start > End)
+            if (IsInvalid()) 
                 return 0;
             
             // 若不在區間內
@@ -28,6 +28,11 @@ namespace Budget
             var overlappingEnd   = End   < budgetDuration.End ? End : budgetDuration.End;
             
             return (overlappingEnd - overlappingStart).Days + 1;
+        }
+
+        private bool IsInvalid()
+        {
+            return (Start > End);
         }
     }
 }
