@@ -30,5 +30,10 @@ namespace Budget
         {
             return new DateTime(FirstDay().Year, FirstDay().Month, Days());
         }
+
+        public int OverlappingAmount(Duration duration)
+        {
+            return DailyAmount() * duration.OverlappingDays(this);
+        }
     }
 }
