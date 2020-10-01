@@ -4,18 +4,6 @@ using NSubstitute;
 
 namespace Budget
 {
-    public class InClassName
-    {
-        public InClassName(DateTime start , int daysInMonth)
-        {
-            Start       = start;
-            DaysInMonth = daysInMonth;
-        }
-
-        public DateTime Start       { get; private set; }
-        public int      DaysInMonth { get; private set; }
-    }
-
     public class BudgetService
     {
         private readonly IBudgetRepo _repo;
@@ -41,34 +29,42 @@ namespace Budget
             var totalBudget = 0;
             foreach (var budget in budgets)
             {
-                DateTime overlappingEnd = new DateTime();
-                DateTime overlappingStart = new DateTime();
+                var overlappingStart = start;
+                var overlappingEnd = end;
                 
-                var      isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
+                var isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
                 if (isSameDay)
                 {
                     if (budget.YearMonth == start.ToString("yyyyMM"))
                     {
-                        overlappingEnd   =  end;
                         overlappingStart =  start;
+                        overlappingEnd   =  end;
+                    }
+                    else
+                    {
+                        continue;
                     }
                 }
                 else
                 {
                     if (budget.YearMonth == start.ToString("yyyyMM"))
                     {
-                        overlappingEnd   =  budget.LastDay();
                         overlappingStart =  start;
+                        overlappingEnd   =  budget.LastDay();
                     }
                     else if (budget.YearMonth == end.ToString("yyyyMM"))
                     {
-                        overlappingEnd   =  end;
                         overlappingStart =  budget.FirstDay();
+                        overlappingEnd   =  end;
                     }
                     else if (budget.FirstDay() >= start && budget.FirstDay() <= end) //前空白區間
                     {
-                        overlappingEnd   =  budget.LastDay();
                         overlappingStart =  budget.FirstDay();
+                        overlappingEnd   =  budget.LastDay();
+                    }
+                    else
+                    {
+                        continue;
                     }
                 }
                 
