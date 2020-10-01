@@ -67,8 +67,9 @@ namespace Budget
                         continue;
                     }
                 }
-                
-                totalBudget += budget.DailyAmount() * ((overlappingEnd - overlappingStart).Days + 1);
+
+                var overlappingDays = ((overlappingEnd - overlappingStart).Days + 1);
+                totalBudget += budget.DailyAmount() * overlappingDays;
             }
 
             return totalBudget;
