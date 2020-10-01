@@ -14,25 +14,9 @@ namespace Budget
 
         public double Query(DateTime start, DateTime end)
         {
-            if (start > end)
-            {
-                return 0;
-            }
-
-            var budgets = _repo.GetAll();
-            if (!budgets.Any())
-            {
-                return 0;
-            }
-
-            var duration    = new Duration(start, end);
-            var totalBudget = 0;
-            foreach (var budget in budgets)
-            {
-                totalBudget += budget.OverlappingAmount(duration);
-            }
-
-            return totalBudget;
+            var duration = new Duration(start, end);
+            return _repo.GetAll()
+                        .Sum(budget => budget.OverlappingAmount(duration));
         }
     }
 }
