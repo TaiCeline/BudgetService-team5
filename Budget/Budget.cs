@@ -20,5 +20,10 @@ namespace Budget
             var daysInMonth = DateTime.DaysInMonth(FirstDay().Year, FirstDay().Month);
             return daysInMonth;
         }
+
+        public int DailyAmount()
+        {
+            return Amount / Days();
+        }
     }
 }
