@@ -31,39 +31,39 @@ namespace Budget
                 if(start > budget.LastDay() || end < budget.FirstDay()) //若不在區間內
                     continue;
                 
-                totalBudget += budget.DailyAmount() * OverlappingDays(start , end , budget);
+                totalBudget += budget.DailyAmount() * OverlappingDays(new Duration(start, end), budget);
             }
 
             return totalBudget;
         }
 
-        private static int OverlappingDays(DateTime start , DateTime end , Budget budget)
+        private static int OverlappingDays(Duration duration , Budget budget)
         {
-            var overlappingStart = start;
-            var overlappingEnd   = end;
+            var overlappingStart = duration.Start;
+            var overlappingEnd   = duration.End;
 
-            var isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
+            var isSameDay = duration.Start.ToString("yyyyMM") == duration.End.ToString("yyyyMM");
             if (isSameDay)
             {
-                if (budget.YearMonth == start.ToString("yyyyMM"))
+                if (budget.YearMonth == duration.Start.ToString("yyyyMM"))
                 {
-                    overlappingStart = start;
-                    overlappingEnd   = end;
+                    overlappingStart = duration.Start;
+                    overlappingEnd   = duration.End;
                 }
             }
             else
             {
-                if (budget.YearMonth == start.ToString("yyyyMM")) //開始查點~Budget最後一天
+                if (budget.YearMonth == duration.Start.ToString("yyyyMM")) //開始查點~Budget最後一天
                 {
-                    overlappingStart = start;
+                    overlappingStart = duration.Start;
                     overlappingEnd   = budget.LastDay();
                 }
-                else if (budget.YearMonth == end.ToString("yyyyMM")) //Budget第一天~結束查點
+                else if (budget.YearMonth == duration.End.ToString("yyyyMM")) //Budget第一天~結束查點
                 {
                     overlappingStart = budget.FirstDay();
-                    overlappingEnd   = end;
+                    overlappingEnd   = duration.End;
                 }
-                else if (budget.FirstDay() >= start && budget.FirstDay() <= end) //跨兩個月區間
+                else if (budget.FirstDay() >= duration.Start && budget.FirstDay() <= duration.End) //跨兩個月區間
                 {
                     overlappingStart = budget.FirstDay();
                     overlappingEnd   = budget.LastDay();
@@ -72,5 +72,18 @@ namespace Budget
 
             return (overlappingEnd - overlappingStart).Days + 1;
         }
+    }
+
+    public class Duration
+    {
+        public Duration(DateTime start , DateTime end)
+        {
+            Start = start;
+            End   = end;
+        }
+
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+
     }
 }
