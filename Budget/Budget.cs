@@ -25,5 +25,10 @@ namespace Budget
         {
             return Amount / Days();
         }
+
+        public DateTime LastDays()
+        {
+            return new DateTime(FirstDay().Year, FirstDay().Month, Days());
+        }
     }
 }

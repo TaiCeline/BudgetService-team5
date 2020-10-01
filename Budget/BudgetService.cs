@@ -4,6 +4,18 @@ using NSubstitute;
 
 namespace Budget
 {
+    public class InClassName
+    {
+        public InClassName(DateTime start , int daysInMonth)
+        {
+            Start       = start;
+            DaysInMonth = daysInMonth;
+        }
+
+        public DateTime Start       { get; private set; }
+        public int      DaysInMonth { get; private set; }
+    }
+
     public class BudgetService
     {
         private readonly IBudgetRepo _repo;
@@ -41,9 +53,7 @@ namespace Budget
                 {
                     if (budget.YearMonth == start.ToString("yyyyMM"))
                     {
-                        var daysInMonth = budget.Days();
-                        var lastOfMonth = new DateTime(start.Year, start.Month, daysInMonth);
-                        totalBudget += budget.DailyAmount() * ((lastOfMonth - start).Days + 1);
+                        totalBudget += budget.DailyAmount() * ((budget.LastDays() - start).Days + 1);
                     }
                     else if (budget.YearMonth == end.ToString("yyyyMM"))
                     {
