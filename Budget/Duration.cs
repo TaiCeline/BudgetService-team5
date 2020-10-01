@@ -15,11 +15,11 @@ namespace Budget
 
         public int OverlappingDays(Duration budgetDuration)
         {
-            // 若起迄相反
+            // 若起迄相反, 回傳0 (Day)
             if (IsInvalid()) 
                 return 0;
             
-            // 若不在區間內
+            // 若不在區間內, 回傳0 (Day)
             if(Start > budgetDuration.End || End < budgetDuration.Start)
                 return 0;
             
