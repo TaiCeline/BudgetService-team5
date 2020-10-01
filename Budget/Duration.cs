@@ -15,6 +15,9 @@ namespace Budget
 
         public int OverlappingDays(Budget budget)
         {
+            if(Start > budget.LastDay() || End < budget.FirstDay()) //若不在區間內
+                return 0;
+            
             // 起始點：誰大用誰, 結束點：誰小用誰
             var overlappingStart = Start > budget.FirstDay() ? Start : budget.FirstDay();
             var overlappingEnd = End < budget.LastDay() ? End : budget.LastDay();

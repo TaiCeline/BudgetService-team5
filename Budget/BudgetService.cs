@@ -28,10 +28,8 @@ namespace Budget
             var totalBudget = 0;
             foreach (var budget in budgets)
             {
-                if(start > budget.LastDay() || end < budget.FirstDay()) //若不在區間內
-                    continue;
-                
-                totalBudget += budget.DailyAmount() * new Duration(start, end).OverlappingDays(budget);
+                totalBudget += budget.DailyAmount() *
+                               new Duration(start, end).OverlappingDays(budget);
             }
 
             return totalBudget;
