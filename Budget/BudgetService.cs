@@ -25,14 +25,19 @@ namespace Budget
                 return 0;
             }
 
+            var duration    = new Duration(start, end);
             var totalBudget = 0;
             foreach (var budget in budgets)
             {
-                totalBudget += budget.DailyAmount() *
-                               new Duration(start, end).OverlappingDays(budget);
+                totalBudget += OverlappingAmount(budget, duration);
             }
 
             return totalBudget;
+        }
+
+        private static int OverlappingAmount(Budget budget, Duration duration)
+        {
+            return budget.DailyAmount() * duration.OverlappingDays(budget);
         }
     }
 }
