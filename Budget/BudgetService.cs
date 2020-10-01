@@ -41,29 +41,38 @@ namespace Budget
             var totalBudget = 0;
             foreach (var budget in budgets)
             {
-                var isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
+                DateTime overlappingEnd = new DateTime();
+                DateTime overlappingStart = new DateTime();
+                
+                var      isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
                 if (isSameDay)
                 {
                     if (budget.YearMonth == start.ToString("yyyyMM"))
                     {
-                        totalBudget += budget.DailyAmount() * ((end - start).Days + 1);
+                        overlappingEnd   =  end;
+                        overlappingStart =  start;
                     }
                 }
                 else
                 {
                     if (budget.YearMonth == start.ToString("yyyyMM"))
                     {
-                        totalBudget += budget.DailyAmount() * ((budget.LastDays() - start).Days + 1);
+                        overlappingEnd   =  budget.LastDay();
+                        overlappingStart =  start;
                     }
                     else if (budget.YearMonth == end.ToString("yyyyMM"))
                     {
-                        totalBudget += budget.DailyAmount() * ((end - budget.FirstDay()).Days + 1);
+                        overlappingEnd   =  end;
+                        overlappingStart =  budget.FirstDay();
                     }
-                    else if (budget.FirstDay() >= start && budget.FirstDay() <= end)
+                    else if (budget.FirstDay() >= start && budget.FirstDay() <= end) //前空白區間
                     {
-                        totalBudget += budget.Amount;
+                        overlappingEnd   =  budget.LastDay();
+                        overlappingStart =  budget.FirstDay();
                     }
                 }
+                
+                totalBudget += budget.DailyAmount() * ((overlappingEnd - overlappingStart).Days + 1);
             }
 
             return totalBudget;
