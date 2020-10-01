@@ -13,14 +13,14 @@ namespace Budget
         public DateTime Start { get; set; }
         public DateTime End   { get; set; }
 
-        public int OverlappingDays(Budget budget)
+        public int OverlappingDays(Duration budgetDuration)
         {
-            if(Start > budget.LastDay() || End < budget.FirstDay()) //若不在區間內
+            if(Start > budgetDuration.End || End < budgetDuration.Start) //若不在區間內
                 return 0;
             
             // 起始點：誰大用誰, 結束點：誰小用誰
-            var overlappingStart = Start > budget.FirstDay() ? Start : budget.FirstDay();
-            var overlappingEnd = End < budget.LastDay() ? End : budget.LastDay();
+            var overlappingStart = Start > budgetDuration.Start ? Start : budgetDuration.Start;
+            var overlappingEnd   = End   < budgetDuration.End ? End : budgetDuration.End;
             
             return (overlappingEnd - overlappingStart).Days + 1;
         }

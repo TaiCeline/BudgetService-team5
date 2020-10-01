@@ -33,7 +33,12 @@ namespace Budget
 
         public int OverlappingAmount(Duration duration)
         {
-            return DailyAmount() * duration.OverlappingDays(this);
+            return DailyAmount() * duration.OverlappingDays(CreateBudgetDuration());
+        }
+
+        public Duration CreateBudgetDuration()
+        {
+            return new Duration(FirstDay(), LastDay());
         }
     }
 }
