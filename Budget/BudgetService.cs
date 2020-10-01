@@ -29,8 +29,11 @@ namespace Budget
             var totalBudget = 0;
             foreach (var budget in budgets)
             {
-                var overlappingStart = start;
-                var overlappingEnd = end;
+                if(start > budget.LastDay() || end < budget.FirstDay()) //若不在區間內
+                    continue;
+                
+                DateTime overlappingStart;
+                DateTime overlappingEnd;
                 
                 var isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
                 if (isSameDay)
@@ -47,17 +50,17 @@ namespace Budget
                 }
                 else
                 {
-                    if (budget.YearMonth == start.ToString("yyyyMM"))
+                    if (budget.YearMonth == start.ToString("yyyyMM")) //開始查點~Budget最後一天
                     {
                         overlappingStart =  start;
                         overlappingEnd   =  budget.LastDay();
                     }
-                    else if (budget.YearMonth == end.ToString("yyyyMM"))
+                    else if (budget.YearMonth == end.ToString("yyyyMM")) //Budget第一天~結束查點
                     {
                         overlappingStart =  budget.FirstDay();
                         overlappingEnd   =  end;
                     }
-                    else if (budget.FirstDay() >= start && budget.FirstDay() <= end) //前空白區間
+                    else if (budget.FirstDay() >= start && budget.FirstDay() <= end) //跨兩個月區間
                     {
                         overlappingStart =  budget.FirstDay();
                         overlappingEnd   =  budget.LastDay();
