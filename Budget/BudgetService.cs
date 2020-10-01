@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using NSubstitute;
 
 namespace Budget
 {
@@ -32,50 +31,46 @@ namespace Budget
                 if(start > budget.LastDay() || end < budget.FirstDay()) //若不在區間內
                     continue;
                 
-                DateTime overlappingStart;
-                DateTime overlappingEnd;
-                
-                var isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
-                if (isSameDay)
-                {
-                    if (budget.YearMonth == start.ToString("yyyyMM"))
-                    {
-                        overlappingStart =  start;
-                        overlappingEnd   =  end;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    if (budget.YearMonth == start.ToString("yyyyMM")) //開始查點~Budget最後一天
-                    {
-                        overlappingStart =  start;
-                        overlappingEnd   =  budget.LastDay();
-                    }
-                    else if (budget.YearMonth == end.ToString("yyyyMM")) //Budget第一天~結束查點
-                    {
-                        overlappingStart =  budget.FirstDay();
-                        overlappingEnd   =  end;
-                    }
-                    else if (budget.FirstDay() >= start && budget.FirstDay() <= end) //跨兩個月區間
-                    {
-                        overlappingStart =  budget.FirstDay();
-                        overlappingEnd   =  budget.LastDay();
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-
-                var overlappingDays = ((overlappingEnd - overlappingStart).Days + 1);
-                totalBudget += budget.DailyAmount() * overlappingDays;
+                totalBudget += budget.DailyAmount() * OverlappingDays(start , end , budget);
             }
 
             return totalBudget;
+        }
+
+        private static int OverlappingDays(DateTime start , DateTime end , Budget budget)
+        {
+            var overlappingStart = start;
+            var overlappingEnd   = end;
+
+            var isSameDay = start.ToString("yyyyMM") == end.ToString("yyyyMM");
+            if (isSameDay)
+            {
+                if (budget.YearMonth == start.ToString("yyyyMM"))
+                {
+                    overlappingStart = start;
+                    overlappingEnd   = end;
+                }
+            }
+            else
+            {
+                if (budget.YearMonth == start.ToString("yyyyMM")) //開始查點~Budget最後一天
+                {
+                    overlappingStart = start;
+                    overlappingEnd   = budget.LastDay();
+                }
+                else if (budget.YearMonth == end.ToString("yyyyMM")) //Budget第一天~結束查點
+                {
+                    overlappingStart = budget.FirstDay();
+                    overlappingEnd   = end;
+                }
+                else if (budget.FirstDay() >= start && budget.FirstDay() <= end) //跨兩個月區間
+                {
+                    overlappingStart = budget.FirstDay();
+                    overlappingEnd   = budget.LastDay();
+                }
+            }
+
+            return (overlappingEnd - overlappingStart).Days + 1;
         }
     }
 }
